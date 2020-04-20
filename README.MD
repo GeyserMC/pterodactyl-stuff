@@ -1,1 +1,2 @@
-This is a GEYSERMC Pterodactyl Egg for the Pterodactyl Control Panel -Sincerely finder17
+# Containers: GeyserMC
+Container built for auto updating of GeyserMC, built upon https://github.com/pterodactyl/images/tree/java.
