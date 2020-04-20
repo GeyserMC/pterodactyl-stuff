@@ -5,7 +5,7 @@
     },
     "exported_at": "2020-04-14T01:49:48+01:00",
     "name": "GeyserMC",
-    "author": "support@geysermc.org",
+    "author": "support@geysermc..org",
     "description": "Geyser is a bridge between Minecraft: Bedrock Edition and Minecraft: Java Edition, closing the gap from those wanting to play true cross-platform.",
     "image": "quay.io\/pterodactyl\/core:java",
     "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
