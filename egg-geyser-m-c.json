@@ -3,7 +3,7 @@
     "meta": {
         "version": "PTDL_v1"
     },
-    "exported_at": "2020-04-20T01:49:30+01:00",
+    "exported_at": "2020-04-20T02:20:02+01:00",
     "name": "GeyserMC",
     "author": "support@geysermc.org",
     "description": "Geyser is a bridge between Minecraft: Bedrock Edition and Minecraft: Java Edition, closing the gap from those wanting to play true cross-platform.",
@@ -17,7 +17,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\n# GeyserMC Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napk update\r\napk add curl\r\ncd \/mnt\/server\r\ncurl -o ${SERVER_JARFILE} https:\/\/ci.nukkitx.com\/job\/GeyserMC\/job\/Geyser\/job\/${UPDATE_BRANCH}\/lastSuccessfulBuild\/artifact\/bootstrap\/standalone\/target\/Geyser.jar",
+            "script": "#!\/bin\/ash\r\n# GeyserMC Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napk update\r\napk add curl\r\ncd \/mnt\/server\r\ncurl -s https:\/\/ci.nukkitx.com\/job\/GeyserMC\/job\/Geyser\/job\/${UPDATE_BRANCH}\/lastSuccessfulBuild\/api\/xml?xpath=\/\/lastBuiltRevision\/SHA1 | sed 's\/.*>\\(.*\\)<.*\/\\1\/' > \".currenthash\"\r\ncurl -o ${SERVER_JARFILE} https:\/\/ci.nukkitx.com\/job\/GeyserMC\/job\/Geyser\/job\/${UPDATE_BRANCH}\/lastSuccessfulBuild\/artifact\/bootstrap\/standalone\/target\/Geyser.jar",
             "container": "alpine:3.4",
             "entrypoint": "ash"
         }
