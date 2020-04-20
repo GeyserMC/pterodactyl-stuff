@@ -1,2 +1,2 @@
-
-This is a GEYSERMC. Pterodactyl Egg for the Pterodactyl Control Panel -Sincerely finder17
+# GeyserMC Pterodactyl Stuff
+This repo contains an egg for GeyserMC and the docker image for auto update support used by the egg, for Pterodactyl Panel
