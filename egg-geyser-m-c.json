@@ -3,14 +3,14 @@
     "meta": {
         "version": "PTDL_v1"
     },
-    "exported_at": "2020-04-20T23:03:40+01:00",
+    "exported_at": "2020-08-27T15:08:05+01:00",
     "name": "GeyserMC",
     "author": "support@geysermc.org",
     "description": "Geyser is a bridge between Minecraft: Bedrock Edition and Minecraft: Java Edition, closing the gap from those wanting to play true cross-platform.",
     "image": "quay.io\/geysermc\/pterodactyl-stuff:docker-container",
     "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
     "config": {
-        "files": "{\r\n    \"config.yml\": {\r\n        \"parser\": \"yaml\",\r\n        \"find\": {\r\n            \"bedrock.address\": \"0.0.0.0\",\r\n            \"bedrock.port\": \"{{server.build.default.port}}\",\r\n            \"remote.address\": \"{{env.JAVA_IP}}\",\r\n            \"remote.port\": \"{{env.JAVA_PORT}}\",\r\n            \"remote.auth-type\": \"{{env.AUTH_TYPE}}\",\r\n            \"ping-passthrough\": \"{{env.PING_PASS}}\",\r\n            \"allow-third-party-capes\": \"{{env.ALLOW_CAPES}}\",\r\n            \"default-locale\": \"{{env.DEFAULT_LOCALE}}\"\r\n        }\r\n    }\r\n}",
+        "files": "{\r\n    \"config.yml\": {\r\n        \"parser\": \"yaml\",\r\n        \"find\": {\r\n            \"bedrock.address\": \"0.0.0.0\",\r\n            \"bedrock.port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \")! Run \/geyser help for help!\",\r\n    \"userInteraction\": []\r\n}",
         "logs": "{}",
         "stop": "geyser shutdown"
@@ -31,60 +31,6 @@
             "user_viewable": 1,
             "user_editable": 1,
             "rules": "required|regex:\/^([\\w\\d._-]+)(\\.jar)$\/"
-        },
-        {
-            "name": "Java Edition server IP",
-            "description": "The IP address of the remote (Java Edition) server.",
-            "env_variable": "JAVA_IP",
-            "default_value": "127.0.0.1",
-            "user_viewable": 1,
-            "user_editable": 1,
-            "rules": "required|string"
-        },
-        {
-            "name": "Java Edition server Port",
-            "description": "The port of the remote (Java Edition) server.",
-            "env_variable": "JAVA_PORT",
-            "default_value": "25565",
-            "user_viewable": 1,
-            "user_editable": 1,
-            "rules": "required|integer"
-        },
-        {
-            "name": "Auth type",
-            "description": "Authentication type. Can be offline, online, or floodgate (see https:\/\/github.com\/GeyserMC\/Geyser\/wiki\/Floodgate).",
-            "env_variable": "AUTH_TYPE",
-            "default_value": "online",
-            "user_viewable": 1,
-            "user_editable": 1,
-            "rules": "required|in:offline,online,floodgate"
-        },
-        {
-            "name": "Ping passthrough",
-            "description": "Relay the MOTD, player count and max players from the remote server.\r\n\r\nThis needs to be a 0 (false) or 1 (true) due to weird boolean parsing.",
-            "env_variable": "PING_PASS",
-            "default_value": "0",
-            "user_viewable": 1,
-            "user_editable": 1,
-            "rules": "required|boolean"
-        },
-        {
-            "name": "Allow third party capes",
-            "description": "Allow third party capes to be visible. Currently allowing: OptiFine capes, LabyMod capes, 5Zig capes and MinecraftCapes.\r\n\r\nThis needs to be a 0 (false) or 1 (true) due to weird boolean parsing.",
-            "env_variable": "ALLOW_CAPES",
-            "default_value": "1",
-            "user_viewable": 1,
-            "user_editable": 1,
-            "rules": "required|boolean"
-        },
-        {
-            "name": "Default locale",
-            "description": "The default locale if we don't have the one the client requested.",
-            "env_variable": "DEFAULT_LOCALE",
-            "default_value": "en_us",
-            "user_viewable": 1,
-            "user_editable": 1,
-            "rules": "required|string|max:7"
         },
         {
             "name": "Auto update",
