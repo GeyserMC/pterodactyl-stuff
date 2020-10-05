@@ -1,0 +1,54 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v1"
+    },
+    "exported_at": "2020-10-05T20:31:31+01:00",
+    "name": "GeyserConnect",
+    "author": "support@geysermc.org",
+    "description": "GeyserConnect is an easy way for Bedrock Edition clients to connect to any Java Edition servers without having to run anything.",
+    "image": "quay.io\/geysermc\/pterodactyl-stuff:docker-geyserconnect",
+    "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
+    "config": {
+        "files": "{\r\n    \"config.yml\": {\r\n        \"parser\": \"yaml\",\r\n        \"find\": {\r\n            \"address\": \"0.0.0.0\",\r\n            \"port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Server started on\",\r\n    \"userInteraction\": []\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n# GeyserConnect Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napk update\r\napk add curl\r\ncd \/mnt\/server\r\ncurl -s https:\/\/ci.nukkitx.com\/job\/GeyserMC\/job\/GeyserConnect\/job\/${UPDATE_BRANCH}\/lastSuccessfulBuild\/api\/xml?xpath=\/\/lastBuiltRevision\/SHA1 | sed 's\/.*>\\(.*\\)<.*\/\\1\/' > \".currenthash\"\r\ncurl -o ${SERVER_JARFILE} https:\/\/ci.nukkitx.com\/job\/GeyserMC\/job\/GeyserConnect\/job\/${UPDATE_BRANCH}\/lastSuccessfulBuild\/artifact\/target\/GeyserConnect.jar",
+            "container": "alpine:3.4",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Geyser JAR",
+            "description": "This is the GeyserConnect jar.",
+            "env_variable": "SERVER_JARFILE",
+            "default_value": "GeyserConnect.jar",
+            "user_viewable": 1,
+            "user_editable": 1,
+            "rules": "required|regex:\/^([\\w\\d._-]+)(\\.jar)$\/"
+        },
+        {
+            "name": "Auto update",
+            "description": "",
+            "env_variable": "AUTO_UPDATE",
+            "default_value": "1",
+            "user_viewable": 1,
+            "user_editable": 1,
+            "rules": "required|boolean"
+        },
+        {
+            "name": "Branch",
+            "description": "The branch to fetch when downloading GeyserConnect",
+            "env_variable": "UPDATE_BRANCH",
+            "default_value": "master",
+            "user_viewable": 1,
+            "user_editable": 1,
+            "rules": "required|string"
+        }
+    ]
+}
