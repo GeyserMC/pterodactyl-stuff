@@ -4,7 +4,7 @@
         "version": "PTDL_v1"
     },
     "exported_at": "2020-11-23T04:04:40-06:00",
-    "name": "Bungeecord+Geyser+Floodgate",
+    "name": "Bungeecord + Geyser + Floodgate",
     "author": "support@geysermc.org",
     "description": "For a long time, Minecraft server owners have had a dream that encompasses a free, easy, and reliable way to connect multiple Minecraft servers together. BungeeCord is the answer to said dream. Whether you are a small server wishing to string multiple game-modes together, or the owner of the ShotBow Network, BungeeCord is the ideal solution for you. With the help of BungeeCord, you will be able to unlock your community's full potential.\r\n\r\nThis modified egg will also install the GeyserMC and Floodgate plugins. These allow bedrock players to connect to the java server without needing a Java account.",
     "image": "quay.io\/pterodactyl\/core:java",
