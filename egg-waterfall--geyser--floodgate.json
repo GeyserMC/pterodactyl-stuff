@@ -1,0 +1,64 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v1"
+    },
+    "exported_at": "2020-11-25T19:10:35+00:00",
+    "name": "Waterfall + Geyser + Floodgate",
+    "author": "support@geysermc.org",
+    "description": "Waterfall is a fork of the well-known BungeeCord server teleportation suite.\r\n\r\nThis customization installs the GeyserMC and Floodgate plugins, which allows Bedrock players to connect without needing a Java account.",
+    "features": null,
+    "image": "quay.io\/pterodactyl\/core:java",
+    "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
+    "config": {
+        "files": "{\r\n    \"config.yml\": {\r\n        \"parser\": \"yaml\",\r\n        \"find\": {\r\n            \"listeners[0].host\": \"0.0.0.0:{{server.build.default.port}}\",\r\n            \"servers.*.address\": {\r\n                \"127.0.0.1\": \"{{config.docker.interface}}\",\r\n                \"localhost\": \"{{config.docker.interface}}\"\r\n            }\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Listening on \",\r\n    \"userInteraction\": [\r\n        \"Listening on \/0.0.0.0:\"\r\n    ]\r\n}",
+        "logs": "{\r\n    \"custom\": false,\r\n    \"location\": \"proxy.log.0\"\r\n}",
+        "stop": "end"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n# Paper Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napt update\r\napt install -y curl jq\r\nmkdir -p \/mnt\/server\/\r\ncd \/mnt\/server\r\nif [ -n \"${DL_PATH}\" ]; then\r\necho -e \"using supplied download url\"\r\nDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's\/{{\/${\/g' -e 's\/}}\/}\/g')`\r\nelse\r\nif [ -z \"$VANILLA_VERSION\" ] || [ \"${MINECRAFT_VERSION}\" == \"latest\" ]; then\r\necho -e \"getting latest supported mc version and latest paper build\"\r\nMINECRAFT_VERSION=$(curl -s https:\/\/papermc.io\/api\/v1\/waterfall | jq -r '.versions[0]')\r\nBUILD_NUMBER=$(curl -sSL https:\/\/papermc.io\/api\/v1\/waterfall\/${MINECRAFT_VERSION} | jq -r '.builds.latest')\r\nVER_EXISTS=true\r\nelse\r\necho -e \"checking if version ${MINECRAFT_VERSION} exists\"\r\nVER_EXISTS=$(curl -s https:\/\/papermc.io\/api\/v1\/waterfall | jq -r --arg VERSION ${MINECRAFT_VERSION} '.versions[] | contains($VERSION)' | grep true)\r\nfi\r\nif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\necho -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\nelse\r\necho -e \"Using the latest waterfall version\"\r\nMINECRAFT_VERSION=${LATEST_WATERFALL_VERSION}\r\nfi\r\nBUILD_EXISTS=$(curl -sSL https:\/\/papermc.io\/api\/v1\/waterfall\/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds.all[] | contains($BUILD)' | grep true)\r\nif [ \"${BUILD_EXISTS}\" == \"true\" ] || [ ${BUILD_NUMBER} == \"latest\" ]; then\r\necho -e \"Build is valid. Using version ${BUILD_NUMBER}\"\r\nelse\r\necho -e \"Using the latest paper build for version ${MINECRAFT_VERSION}\"\r\nBUILD_NUMBER=$(curl -sSL https:\/\/papermc.io\/api\/v1\/waterfall\/${MINECRAFT_VERSION} | jq -r '.builds.latest')\r\nfi\r\necho \"Version being downloaded\"\r\necho -e \"MC Version: ${MINECRAFT_VERSION}\"\r\necho -e \"Build: ${BUILD_NUMBER}\"\r\nDOWNLOAD_URL=https:\/\/papermc.io\/api\/v1\/waterfall\/${MINECRAFT_VERSION}\/${BUILD_NUMBER}\/download\r\nfi\r\nif [ -z ${SERVER_JARFILE} ]; then\r\nSERVER_JARFILE=server.jar\r\nfi\r\nif [[ ! $SERVER_JARFILE = *\\.jar ]]; then\r\nSERVER_JARFILE=\"$SERVER_JARFILE.jar\"\r\nfi\r\necho -e \"running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\nif [ ! -f config.yml ]; then\r\necho -e \"Downloading waterfall config.yml\"\r\ncurl -o config.yml https:\/\/raw.githubusercontent.com\/parkervcp\/eggs\/master\/minecraft\/proxy\/java\/waterfall\/config.yml\r\nelse\r\necho -e \"Waterfall config.yml exists. Will not pull a new file\"\r\nfi\r\necho -e \"Downloading Geyser and Floodgate\"\r\nmkdir -p plugins\/Geyser-BungeeCord\/\r\ncurl -o plugins\/Geyser-BungeeCord.jar https:\/\/ci.nukkitx.com\/job\/GeyserMC\/job\/Geyser\/job\/master\/lastSuccessfulBuild\/artifact\/bootstrap\/spigot\/target\/Geyser-BungeeCord.jar\r\ncurl -o plugins\/floodgate-bungee.jar https:\/\/ci.nukkitx.com\/job\/GeyserMC\/job\/Floodgate\/job\/master\/lastSuccessfulBuild\/artifact\/bungee\/target\/floodgate-bungee.jar\r\nif [[ ! -f \"plugins\/Geyser-BungeeCord\/config.yml\" ]]; then\r\necho -e \"Downloading default Geyser config\"\r\ncurl -o plugins\/Geyser-BungeeCord\/config.yml https:\/\/raw.githubusercontent.com\/GeyserMC\/Geyser\/master\/connector\/src\/main\/resources\/config.yml\r\nsed -i 's\/: online\/: floodgate\/g' plugins\/Geyser-BungeeCord\/config.yml\r\nfi",
+            "container": "debian:buster-slim",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Minecraft Version",
+            "description": "The version of Minecraft that water was built to support.",
+            "env_variable": "MINECRAFT_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|alpha_num|between:1,6"
+        },
+        {
+            "name": "Waterfall Jar File",
+            "description": "The name of the Jarfile to use when running Waterfall.",
+            "env_variable": "SERVER_JARFILE",
+            "default_value": "waterfall.jar",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|regex:\/^([\\w\\d._-]+)(\\.jar)$\/"
+        },
+        {
+            "name": "Download Link",
+            "description": "A link to the server jar to download the waterfall jar.",
+            "env_variable": "DL_LINK",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string"
+        },
+        {
+            "name": "Waterfall build number",
+            "description": "Default is latest.\r\n\r\nif set to latest or an invalid version will grab the latest build number.",
+            "env_variable": "BUILD_NUMBER",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20"
+        }
+    ]
+}
