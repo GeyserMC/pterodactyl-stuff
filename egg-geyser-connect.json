@@ -12,7 +12,6 @@
     "images": [
         "quay.io\/geysermc\/pterodactyl-stuff:docker-geyserconnect"
     ],
-    "file_denylist": "",
     "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
     "config": {
         "files": "{\r\n    \"config.yml\": {\r\n        \"parser\": \"yaml\",\r\n        \"find\": {\r\n            \"address\": \"0.0.0.0\",\r\n            \"port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
