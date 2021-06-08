@@ -10,6 +10,7 @@
     "description": "Waterfall is a fork of the well-known BungeeCord server teleportation suite.\r\n\r\nThis customization installs the GeyserMC and Floodgate plugins, which allows Bedrock players to connect without needing a Java account.",
     "features": null,
     "images": [
+        "quay.io\/parkervcp\/pterodactyl-images\/debian_openjdk-16",
         "quay.io\/pterodactyl\/core:java-11",
         "quay.io\/pterodactyl\/core:java"
     ],
