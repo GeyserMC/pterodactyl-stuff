@@ -10,7 +10,7 @@
     "description": "Velocity is a Minecraft server proxy with unparalleled server support, scalability, and flexibility.",
     "features": null,
     "images": [
-        "quay.io\/parkervcp\/pterodactyl-images:debian_openjdk-15-hotspot"
+        "quay.io\/parkervcp\/pterodactyl-images:debian_openjdk-16"
     ],
     "file_denylist": [],
     "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar {{SERVER_JARFILE}}",
