@@ -4,7 +4,7 @@
         "version": "PTDL_v1",
         "update_url": null
     },
-    "exported_at": "2021-06-08T22:06:12+02:00",
+    "exported_at": "2021-12-08T18:31:05-05:00",
     "name": "Paper + Geyser + Floodgate",
     "author": "support@geysermc.org",
     "description": "High performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.\r\n\r\nThis customized egg will install the GeyserMC and Floodgate plugins as well. This allows Bedrock players to connect to the server without needing a Java account.",
@@ -12,9 +12,10 @@
         "eula"
     ],
     "images": [
-        "quay.io\/parkervcp\/pterodactyl-images:debian_openjdk-16",
-        "quay.io\/pterodactyl\/core:java-11",
-        "quay.io\/pterodactyl\/core:java"
+        "ghcr.io\/pterodactyl\/yolks:java_17",
+        "ghcr.io\/pterodactyl\/yolks:java_16",
+        "ghcr.io\/pterodactyl\/yolks:java_11",
+        "ghcr.io\/pterodactyl\/yolks:java_8"
     ],
     "file_denylist": [],
     "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",

@@ -4,13 +4,16 @@
         "version": "PTDL_v1",
         "update_url": null
     },
-    "exported_at": "2021-05-31T22:46:50+02:00",
+    "exported_at": "2021-12-08T18:30:28-05:00",
     "name": "Velocity + Geyser + floodgate",
     "author": "parker@parkervcp.com",
     "description": "Velocity is a Minecraft server proxy with unparalleled server support, scalability, and flexibility.",
     "features": null,
     "images": [
-        "quay.io\/parkervcp\/pterodactyl-images:debian_openjdk-16"
+        "ghcr.io\/pterodactyl\/yolks:java_17",
+        "ghcr.io\/pterodactyl\/yolks:java_16",
+        "ghcr.io\/pterodactyl\/yolks:java_11",
+        "ghcr.io\/pterodactyl\/yolks:java_8"
     ],
     "file_denylist": [],
     "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar {{SERVER_JARFILE}}",
