@@ -12,9 +12,10 @@
         "eula"
     ],
     "images": [
-        "quay.io\/parkervcp\/pterodactyl-images:debian_openjdk-16",
-        "quay.io\/pterodactyl\/core:java-11",
-        "quay.io\/pterodactyl\/core:java"
+        "ghcr.io\/pterodactyl\/yolks:java_17",
+        "ghcr.io\/pterodactyl\/yolks:java_16",
+        "quay.io\/pterodactyl\/yolks:java_11",
+        "quay.io\/pterodactyl\/yolks:java_8"
     ],
     "file_denylist": [],
     "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
