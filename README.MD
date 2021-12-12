@@ -9,6 +9,10 @@ This repo contains the eggs for GeyserMC and the docker images for auto update s
 ### Geyser + [PaperMC](https://papermc.io/)
 * Egg: `egg-paper--geyser--floodgate.json`
 
+### Geyser + [Purpur](https://purpurmc.org/)
+* Egg: `egg-purpur--geyser--floodgate.json`
+
+
 ### Geyser + [Waterfall](https://papermc.io/) (Bungeecord)
 * Egg: `egg-waterfall--geyser--floodgate.json`
 
