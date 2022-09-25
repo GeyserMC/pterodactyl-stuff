@@ -17,7 +17,7 @@ if [ "${AUTO_UPDATE}" == "1" ]; then
 	if [ "$LATEST_HASH" != "$CURRENT_HASH" ]; then
 		echo "Update available!"
 		echo "Updating from '$CURRENT_HASH' -> '$LATEST_HASH'"
-		curl -s -o ${SERVER_JARFILE} https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/${UPDATE_BRANCH}/lastSuccessfulBuild/artifact/bootstrap/standalone/target/Geyser-Standalone.jar
+		curl -s -o ${SERVER_JARFILE} https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/${UPDATE_BRANCH}/lastSuccessfulBuild/artifact/bootstrap/standalone/build/libs/Geyser-Standalone.jar
 
 		echo "$LATEST_HASH" > ".currenthash"
 		echo "Updated!"
