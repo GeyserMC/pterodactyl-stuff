@@ -21,7 +21,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\n# GeyserConnect Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napk update\r\napk add curl\r\ncd \/mnt\/server\r\ncurl -s https:\/\/ci.opencollab.dev\/job\/GeyserMC\/job\/GeyserConnect\/job\/${UPDATE_BRANCH}\/lastSuccessfulBuild\/api\/xml?xpath=\/\/lastBuiltRevision\/SHA1 | sed 's\/.*>\\(.*\\)<.*\/\\1\/' > \".currenthash\"\r\ncurl -o ${SERVER_JARFILE} https:\/\/ci.opencollab.dev\/job\/GeyserMC\/job\/GeyserConnect\/job\/${UPDATE_BRANCH}\/lastSuccessfulBuild\/artifact\/target\/GeyserConnect.jar\r\ncurl -o config.yml https:\/\/raw.githubusercontent.com\/GeyserMC\/GeyserConnect\/master\/src\/main\/resources\/config.yml",
+            "script": "#!\/bin\/ash\r\n# GeyserConnect Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napk update\r\napk add curl\r\ncd \/mnt\/server\r\ncurl -s -L https:\/\/ci.opencollab.dev\/job\/GeyserMC\/job\/GeyserConnect\/job\/${UPDATE_BRANCH}\/lastSuccessfulBuild\/api\/xml?xpath=\/\/lastBuiltRevision\/SHA1 | sed 's\/.*>\\(.*\\)<.*\/\\1\/' > \".currenthash\"\r\ncurl -o ${SERVER_JARFILE} -L https:\/\/ci.opencollab.dev\/job\/GeyserMC\/job\/GeyserConnect\/job\/${UPDATE_BRANCH}\/lastSuccessfulBuild\/artifact\/target\/GeyserConnect.jar\r\ncurl -o config.yml https:\/\/raw.githubusercontent.com\/GeyserMC\/GeyserConnect\/master\/src\/main\/resources\/config.yml",
             "container": "alpine:3.4",
             "entrypoint": "ash"
         }
