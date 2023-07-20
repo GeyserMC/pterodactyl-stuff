@@ -80,7 +80,7 @@
             "default_value": "19132",
             "user_viewable": true,
             "user_editable": false,
-            "rules": "required|integer|between:1,65535",
+            "rules": "required|string|max:6",
             "field_type": "text"
         }
     ]
