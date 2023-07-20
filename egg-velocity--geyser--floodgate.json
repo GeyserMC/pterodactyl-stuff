@@ -4,8 +4,8 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2022-07-24T15:00:11+00:00",
-    "name": "Velocity + Geyser + floodgate",
+    "exported_at": "2023-07-20T12:27:20-07:00",
+    "name": "Velocity + Geyser + Floodgate",
     "author": "parker@parkervcp.com",
     "description": "Velocity is a Minecraft server proxy with unparalleled server support, scalability, and flexibility.",
     "features": null,
@@ -16,7 +16,7 @@
         "quay.io\/pterodactyl\/yolks:java_8": "quay.io\/pterodactyl\/yolks:java_8"
     },
     "file_denylist": [],
-    "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -jar {{SERVER_JARFILE}}",
+    "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 -DgeyserUdpPort={{GEYSER_PORT}} -jar {{SERVER_JARFILE}}",
     "config": {
         "files": "{\r\n    \"velocity.toml\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"bind = \": \"bind = \\\"0.0.0.0:{{server.build.default.port}}\\\"\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"Done (\"\r\n}",
@@ -25,7 +25,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\n# Paper Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\nPROJECT=velocity\r\nif [ -n \"${DL_PATH}\" ]; then\r\necho -e \"Using supplied download url: ${DL_PATH}\"\r\nDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's\/{{\/${\/g' -e 's\/}}\/}\/g')`\r\nelse\r\nVER_EXISTS=`curl -s https:\/\/papermc.io\/api\/v2\/projects\/${PROJECT} | jq -r --arg VERSION $VELOCITY_VERSION '.versions[] | contains($VERSION)' | grep true`\r\nLATEST_VERSION=`curl -s https:\/\/papermc.io\/api\/v2\/projects\/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\nif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\necho -e \"Version is valid. Using version ${VELOCITY_VERSION}\"\r\nelse\r\necho -e \"Using the latest ${PROJECT} version\"\r\nVELOCITY_VERSION=${LATEST_VERSION}\r\nfi\r\nBUILD_EXISTS=`curl -s https:\/\/papermc.io\/api\/v2\/projects\/${PROJECT}\/versions\/${VELOCITY_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep true`\r\nLATEST_BUILD=`curl -s https:\/\/papermc.io\/api\/v2\/projects\/${PROJECT}\/versions\/${VELOCITY_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\nif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\necho -e \"Build is valid for version ${VELOCITY_VERSION}. Using build ${BUILD_NUMBER}\"\r\nelse\r\necho -e \"Using the latest ${PROJECT} build for version ${VELOCITY_VERSION}\"\r\nBUILD_NUMBER=${LATEST_BUILD}\r\nfi\r\nJAR_NAME=${PROJECT}-${VELOCITY_VERSION}-${BUILD_NUMBER}.jar\r\necho \"Version being downloaded\"\r\necho -e \"MC Version: ${VELOCITY_VERSION}\"\r\necho -e \"Build: ${BUILD_NUMBER}\"\r\necho -e \"JAR Name of Build: ${JAR_NAME}\"\r\nDOWNLOAD_URL=https:\/\/papermc.io\/api\/v2\/projects\/${PROJECT}\/versions\/${VELOCITY_VERSION}\/builds\/${BUILD_NUMBER}\/downloads\/${JAR_NAME}\r\nfi\r\ncd \/mnt\/server\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\nif [ -f ${SERVER_JARFILE} ]; then\r\nmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\nif [ -f velocity.toml ]; then\r\necho -e \"velocity config file exists\"\r\nelse\r\necho -e \"downloading velocity config file.\"\r\ncurl https:\/\/raw.githubusercontent.com\/parkervcp\/eggs\/master\/game_eggs\/minecraft\/proxy\/java\/velocity\/velocity.toml -o velocity.toml\r\nfi\r\necho -e \"install complete\"\r\necho -e \"Downloading Geyser and Floodgate\"\r\nmkdir -p plugins\/Geyser-Velocity\/\r\ncurl -o plugins\/Geyser-Velocity.jar -L https:\/\/ci.opencollab.dev\/job\/GeyserMC\/job\/Geyser\/job\/master\/lastSuccessfulBuild\/artifact\/bootstrap\/velocity\/target\/Geyser-Velocity.jar\r\ncurl -o plugins\/floodgate-velocity.jar -L https:\/\/ci.opencollab.dev\/job\/GeyserMC\/job\/Floodgate\/job\/master\/lastSuccessfulBuild\/artifact\/velocity\/build\/libs\/floodgate-velocity.jar\r\nif [[ ! -f \"plugins\/Geyser-Velocity\/config.yml\" ]]; then\r\necho -e \"Downloading default Geyser config\"\r\ncurl -o plugins\/Geyser-Velocity\/config.yml https:\/\/raw.githubusercontent.com\/GeyserMC\/Geyser\/master\/core\/src\/main\/resources\/config.yml\r\nsed -i 's\/: online\/: floodgate\/g' plugins\/Geyser-Velocity\/config.yml\r\nfi",
+            "script": "#!\/bin\/ash\r\n# Velocity+GeyserMC+Floodgate Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\nPROJECT=velocity\r\nif [ -n \"${DL_PATH}\" ]; then\r\necho -e \"Using supplied download url: ${DL_PATH}\"\r\nDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's\/{{\/${\/g' -e 's\/}}\/}\/g')`\r\nelse\r\nVER_EXISTS=`curl -s https:\/\/api.papermc.io\/v2\/projects\/${PROJECT} | jq -r --arg VERSION $VELOCITY_VERSION '.versions[] | contains($VERSION)' | grep -m1 true`\r\nLATEST_VERSION=`curl -s https:\/\/api.papermc.io\/v2\/projects\/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\nif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\necho -e \"Version is valid. Using version ${VELOCITY_VERSION}\"\r\nelse\r\necho -e \"Using the latest ${PROJECT} version\"\r\nVELOCITY_VERSION=${LATEST_VERSION}\r\nfi\r\nBUILD_EXISTS=`curl -s https:\/\/api.papermc.io\/v2\/projects\/${PROJECT}\/versions\/${VELOCITY_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep -m1 true`\r\nLATEST_BUILD=`curl -s https:\/\/api.papermc.io\/v2\/projects\/${PROJECT}\/versions\/${VELOCITY_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\nif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\necho -e \"Build is valid for version ${VELOCITY_VERSION}. Using build ${BUILD_NUMBER}\"\r\nelse\r\necho -e \"Using the latest ${PROJECT} build for version ${VELOCITY_VERSION}\"\r\nBUILD_NUMBER=${LATEST_BUILD}\r\nfi\r\nJAR_NAME=${PROJECT}-${VELOCITY_VERSION}-${BUILD_NUMBER}.jar\r\necho \"Version being downloaded\"\r\necho -e \"MC Version: ${VELOCITY_VERSION}\"\r\necho -e \"Build: ${BUILD_NUMBER}\"\r\necho -e \"JAR Name of Build: ${JAR_NAME}\"\r\nDOWNLOAD_URL=https:\/\/api.papermc.io\/v2\/projects\/${PROJECT}\/versions\/${VELOCITY_VERSION}\/builds\/${BUILD_NUMBER}\/downloads\/${JAR_NAME}\r\nfi\r\ncd \/mnt\/server\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\nif [ -f ${SERVER_JARFILE} ]; then\r\nmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\nmkdir plugins\r\necho -e \"Downloading Geyser\"\r\nGEYSER_HASH=`curl -L https:\/\/download.geysermc.org\/v2\/projects\/geyser\/versions\/latest\/builds\/latest | jq -r .downloads.velocity.sha256`\r\ncurl -o plugins\/geyser-velocity.jar -L https:\/\/download.geysermc.org\/v2\/projects\/geyser\/versions\/latest\/builds\/latest\/downloads\/velocity\r\necho \"${GEYSER_HASH} plugins\/geyser-velocity.jar\" | sha256sum -c\r\nRESULT=$?\r\nif [[ $RESULT -eq 0 ]]; then\r\necho \"Geyser SHA256 match\"\r\nelse\r\necho \"SHA256 does not match! Aborting...\"\r\nrm plugins\/geyser-velocity.jar\r\nexit 1\r\nfi\r\necho -e \"Downloading Floodgate\"\r\nFLOODGATE_HASH=`curl -L https:\/\/download.geysermc.org\/v2\/projects\/floodgate\/versions\/latest\/builds\/latest | jq -r .downloads.velocity.sha256`\r\ncurl -o plugins\/floodgate-velocity.jar -L https:\/\/download.geysermc.org\/v2\/projects\/floodgate\/versions\/latest\/builds\/latest\/downloads\/velocity\r\necho \"${FLOODGATE_HASH} plugins\/floodgate-velocity.jar\" | sha256sum -c\r\nRESULT=$?\r\nif [[ $RESULT -eq 0 ]]; then\r\necho \"Floodgate SHA256 match\"\r\nelse\r\necho \"SHA256 does not match! Aborting...\"\r\nrm plugins\/floodgate-velocity.jar\r\nexit 1\r\nfi\r\nmkdir -p plugins\/Geyser-Velocity\/\r\nif [[ ! -f \"plugins\/Geyser-Velocity\/config.yml\" ]]; then\r\necho -e \"Downloading default Geyser config\"\r\ncurl -o plugins\/Geyser-Velocity\/config.yml https:\/\/raw.githubusercontent.com\/GeyserMC\/Geyser\/master\/core\/src\/main\/resources\/config.yml\r\nsed -i 's\/: online\/: floodgate\/g' plugins\/Geyser-Velocity\/config.yml\r\nfi",
             "container": "ghcr.io\/pterodactyl\/installers:alpine",
             "entrypoint": "ash"
         }
@@ -47,8 +47,28 @@
             "env_variable": "SERVER_JARFILE",
             "default_value": "velocity.jar",
             "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|regex:\/^([\\w\\d._-]+)(\\.jar)$\/",
+            "field_type": "text"
+        },
+        {
+            "name": "Build Number",
+            "description": "The build number for the velocity release.\r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
+            "env_variable": "BUILD_NUMBER",
+            "default_value": "latest",
+            "user_viewable": true,
             "user_editable": false,
             "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Geyser Port",
+            "description": "The UDP port that Geyser will listen on\r\n\r\n\"-1\" will forcibly stop Geyser\r\n\"server\" will have Geyser listen on the same port as the TCP server",
+            "env_variable": "GEYSER_PORT",
+            "default_value": "19132",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "required|string|max:6",
             "field_type": "text"
         }
     ]

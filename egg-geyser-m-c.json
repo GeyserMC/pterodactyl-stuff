@@ -1,13 +1,18 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
-        "version": "PTDL_v1"
+        "version": "PTDL_v2",
+        "update_url": null
     },
-    "exported_at": "2020-08-27T15:08:05+01:00",
+    "exported_at": "2023-07-20T12:38:14-07:00",
     "name": "GeyserMC",
     "author": "support@geysermc.org",
     "description": "Geyser is a bridge between Minecraft: Bedrock Edition and Minecraft: Java Edition, closing the gap from those wanting to play true cross-platform.",
-    "image": "quay.io\/geysermc\/pterodactyl-stuff:docker-geyser",
+    "features": null,
+    "docker_images": {
+        "quay.io\/geysermc\/pterodactyl-stuff:docker-geyser": "quay.io\/geysermc\/pterodactyl-stuff:docker-geyser"
+    },
+    "file_denylist": [],
     "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
     "config": {
         "files": "{\r\n    \"config.yml\": {\r\n        \"parser\": \"yaml\",\r\n        \"find\": {\r\n            \"bedrock.address\": \"0.0.0.0\",\r\n            \"bedrock.port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
@@ -17,38 +22,21 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\n# GeyserMC Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napk update\r\napk add curl\r\ncd \/mnt\/server\r\ncurl -s -L https:\/\/ci.opencollab.dev\/job\/GeyserMC\/job\/Geyser\/job\/${UPDATE_BRANCH}\/lastSuccessfulBuild\/api\/xml?xpath=\/\/lastBuiltRevision\/SHA1 | sed 's\/.*>\\(.*\\)<.*\/\\1\/' > \".currenthash\"\r\ncurl -o ${SERVER_JARFILE} -L https:\/\/ci.opencollab.dev\/job\/GeyserMC\/job\/Geyser\/job\/${UPDATE_BRANCH}\/lastSuccessfulBuild\/artifact\/bootstrap\/standalone\/target\/Geyser.jar\r\ncurl -o config.yml https:\/\/raw.githubusercontent.com\/GeyserMC\/Geyser\/master\/core\/src\/main\/resources\/config.yml",
-            "container": "alpine:3.4",
+            "script": "#!\/bin\/ash\r\n# GeyserMC Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\ncd \/mnt\/server\r\nGEYSER_HASH=`curl -L https:\/\/download.geysermc.org\/v2\/projects\/geyser\/versions\/latest\/builds\/latest | jq -r .downloads.standalone.sha256`\r\ncurl -o ${SERVER_JARFILE} -L https:\/\/download.geysermc.org\/v2\/projects\/geyser\/versions\/latest\/builds\/latest\/downloads\/standalone\r\necho \"${GEYSER_HASH} ${SERVER_JARFILE}\" | sha256sum -c\r\nRESULT=$?\r\nif [[ $RESULT -eq 0 ]]; then\r\necho \"Geyser SHA256 match\"\r\nelse\r\necho \"SHA256 does not match! Aborting...\"\r\nrm ${SERVER_JARFILE}\r\nexit 1\r\nfi\r\ncurl -o config.yml https:\/\/raw.githubusercontent.com\/GeyserMC\/Geyser\/master\/core\/src\/main\/resources\/config.yml",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
             "entrypoint": "ash"
         }
     },
     "variables": [
         {
             "name": "Geyser JAR",
-            "description": "This is the GeyserMC jar.",
+            "description": "Server Jarfile, by default this is set to 'geyser.jar'.\r\nSet it to otherwise if you wish to have a different jarfile name.",
             "env_variable": "SERVER_JARFILE",
-            "default_value": "Geyser.jar",
-            "user_viewable": 1,
-            "user_editable": 1,
-            "rules": "required|regex:\/^([\\w\\d._-]+)(\\.jar)$\/"
-        },
-        {
-            "name": "Auto update",
-            "description": "",
-            "env_variable": "AUTO_UPDATE",
-            "default_value": "1",
-            "user_viewable": 1,
-            "user_editable": 1,
-            "rules": "required|boolean"
-        },
-        {
-            "name": "Branch",
-            "description": "The branch to fetch when downloading Geyser",
-            "env_variable": "UPDATE_BRANCH",
-            "default_value": "master",
-            "user_viewable": 1,
-            "user_editable": 1,
-            "rules": "required|string"
+            "default_value": "geyser.jar",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|regex:\/^([\\w\\d._-]+)(\\.jar)$\/",
+            "field_type": "text"
         }
     ]
 }

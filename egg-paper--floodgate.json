@@ -1,22 +1,22 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
-        "version": "PTDL_v1",
+        "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2021-06-08T22:06:11+02:00",
-    "name": "Paper-Floodgate",
+    "exported_at": "2023-07-20T12:33:21-07:00",
+    "name": "Paper + Floodgate",
     "author": "parker@pterodactyl.io",
     "description": "High performance Spigot fork that aims to fix gameplay and mechanics inconsistencies.",
     "features": [
         "eula"
     ],
-    "images": [
-        "ghcr.io\/pterodactyl\/yolks:java_17",
-        "ghcr.io\/pterodactyl\/yolks:java_16",
-        "quay.io\/pterodactyl\/yolks:java_11",
-        "quay.io\/pterodactyl\/yolks:java_8"
-    ],
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:java_17": "ghcr.io\/pterodactyl\/yolks:java_17",
+        "ghcr.io\/pterodactyl\/yolks:java_16": "ghcr.io\/pterodactyl\/yolks:java_16",
+        "quay.io\/pterodactyl\/yolks:java_11": "quay.io\/pterodactyl\/yolks:java_11",
+        "quay.io\/pterodactyl\/yolks:java_8": "quay.io\/pterodactyl\/yolks:java_8"
+    },
     "file_denylist": [],
     "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
     "config": {
@@ -27,9 +27,9 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n# Paper Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\nPROJECT=paper\r\n\r\napt update\r\napt install -y curl jq\r\n\r\nif [ -n \"${DL_PATH}\" ]; then\r\n\techo -e \"Using supplied download url: ${DL_PATH}\"\r\n\tDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's\/{{\/${\/g' -e 's\/}}\/}\/g')`\r\nelse\r\n\tVER_EXISTS=`curl -s https:\/\/papermc.io\/api\/v2\/projects\/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep true`\r\n\tLATEST_VERSION=`curl -s https:\/\/papermc.io\/api\/v2\/projects\/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\n\r\n\tif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} version\"\r\n\t\tMINECRAFT_VERSION=${LATEST_VERSION}\r\n\tfi\r\n\t\r\n\tBUILD_EXISTS=`curl -s https:\/\/papermc.io\/api\/v2\/projects\/${PROJECT}\/versions\/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep true`\r\n\tLATEST_BUILD=`curl -s https:\/\/papermc.io\/api\/v2\/projects\/${PROJECT}\/versions\/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\n\t\r\n\tif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\n\t\techo -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\n\telse\r\n\t\techo -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\n\t\tBUILD_NUMBER=${LATEST_BUILD}\r\n\tfi\r\n\t\r\n\tJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\n\t\r\n\techo \"Version being downloaded\"\r\n\techo -e \"MC Version: ${MINECRAFT_VERSION}\"\r\n\techo -e \"Build: ${BUILD_NUMBER}\"\r\n\techo -e \"JAR Name of Build: ${JAR_NAME}\"\r\n\tDOWNLOAD_URL=https:\/\/papermc.io\/api\/v2\/projects\/${PROJECT}\/versions\/${MINECRAFT_VERSION}\/builds\/${BUILD_NUMBER}\/downloads\/${JAR_NAME}\r\nfi\r\n\r\ncd \/mnt\/server\r\n\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\n\r\nif [ -f ${SERVER_JARFILE} ]; then\r\n\tmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\n\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\n\r\nif [ ! -f server.properties ]; then\r\n    echo -e \"Downloading MC server.properties\"\r\n    curl -o server.properties https:\/\/raw.githubusercontent.com\/parkervcp\/eggs\/master\/minecraft\/java\/server.properties\r\nfi\r\necho -e \"Downloading Floodgate\"\r\nmkdir plugins\r\ncurl -o plugins\/floodgate-spigot.jar\t -L https:\/\/ci.opencollab.dev\/job\/GeyserMC\/job\/Floodgate\/job\/master\/lastSuccessfulBuild\/artifact\/spigot\/target\/floodgate-spigot.jar",
-            "container": "debian:buster-slim",
-            "entrypoint": "bash"
+            "script": "#!\/bin\/ash\r\n# Paper+Floodgate Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\nPROJECT=paper\r\nif [ -n \"${DL_PATH}\" ]; then\r\necho -e \"Using supplied download url: ${DL_PATH}\"\r\nDOWNLOAD_URL=`eval echo $(echo ${DL_PATH} | sed -e 's\/{{\/${\/g' -e 's\/}}\/}\/g')`\r\nelse\r\nVER_EXISTS=`curl -s https:\/\/api.papermc.io\/v2\/projects\/${PROJECT} | jq -r --arg VERSION $MINECRAFT_VERSION '.versions[] | contains($VERSION)' | grep -m1 true`\r\nLATEST_VERSION=`curl -s https:\/\/api.papermc.io\/v2\/projects\/${PROJECT} | jq -r '.versions' | jq -r '.[-1]'`\r\nif [ \"${VER_EXISTS}\" == \"true\" ]; then\r\necho -e \"Version is valid. Using version ${MINECRAFT_VERSION}\"\r\nelse\r\necho -e \"Using the latest ${PROJECT} version\"\r\nMINECRAFT_VERSION=${LATEST_VERSION}\r\nfi\r\nBUILD_EXISTS=`curl -s https:\/\/api.papermc.io\/v2\/projects\/${PROJECT}\/versions\/${MINECRAFT_VERSION} | jq -r --arg BUILD ${BUILD_NUMBER} '.builds[] | tostring | contains($BUILD)' | grep -m1 true`\r\nLATEST_BUILD=`curl -s https:\/\/api.papermc.io\/v2\/projects\/${PROJECT}\/versions\/${MINECRAFT_VERSION} | jq -r '.builds' | jq -r '.[-1]'`\r\nif [ \"${BUILD_EXISTS}\" == \"true\" ]; then\r\necho -e \"Build is valid for version ${MINECRAFT_VERSION}. Using build ${BUILD_NUMBER}\"\r\nelse\r\necho -e \"Using the latest ${PROJECT} build for version ${MINECRAFT_VERSION}\"\r\nBUILD_NUMBER=${LATEST_BUILD}\r\nfi\r\nJAR_NAME=${PROJECT}-${MINECRAFT_VERSION}-${BUILD_NUMBER}.jar\r\necho \"Version being downloaded\"\r\necho -e \"MC Version: ${MINECRAFT_VERSION}\"\r\necho -e \"Build: ${BUILD_NUMBER}\"\r\necho -e \"JAR Name of Build: ${JAR_NAME}\"\r\nDOWNLOAD_URL=https:\/\/api.papermc.io\/v2\/projects\/${PROJECT}\/versions\/${MINECRAFT_VERSION}\/builds\/${BUILD_NUMBER}\/downloads\/${JAR_NAME}\r\nfi\r\ncd \/mnt\/server\r\necho -e \"Running curl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\r\nif [ -f ${SERVER_JARFILE} ]; then\r\nmv ${SERVER_JARFILE} ${SERVER_JARFILE}.old\r\nfi\r\ncurl -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\r\nif [ ! -f server.properties ]; then\r\necho -e \"Downloading MC server.properties\"\r\ncurl -o server.properties https:\/\/raw.githubusercontent.com\/parkervcp\/eggs\/master\/minecraft\/java\/server.properties\r\nfi\r\nmkdir plugins\r\necho -e \"Downloading Floodgate\"\r\nFLOODGATE_HASH=`curl -L https:\/\/download.geysermc.org\/v2\/projects\/floodgate\/versions\/latest\/builds\/latest | jq -r .downloads.spigot.sha256`\r\ncurl -o plugins\/floodgate-spigot.jar -L https:\/\/download.geysermc.org\/v2\/projects\/floodgate\/versions\/latest\/builds\/latest\/downloads\/spigot\r\necho \"${FLOODGATE_HASH} plugins\/floodgate-spigot.jar\" | sha256sum -c\r\nRESULT=$?\r\nif [[ $RESULT -eq 0 ]]; then\r\necho \"Floodgate SHA256 match\"\r\nelse\r\necho \"SHA256 does not match! Aborting...\"\r\nrm plugins\/floodgate-spigot.jar\r\nexit 1\r\nfi",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "entrypoint": "ash"
         }
     },
     "variables": [
@@ -40,16 +40,18 @@
             "default_value": "latest",
             "user_viewable": true,
             "user_editable": false,
-            "rules": "nullable|string|max:20"
+            "rules": "nullable|string|max:20",
+            "field_type": "text"
         },
         {
             "name": "Server Jar File",
-            "description": "The name of the server jarfile to run the server with.",
+            "description": "Server Jarfile, by default this is set to 'server.jar'.\r\nSet it to otherwise if you wish to have a different jarfile name.",
             "env_variable": "SERVER_JARFILE",
             "default_value": "server.jar",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:20"
+            "rules": "required|regex:\/^([\\w\\d._-]+)(\\.jar)$\/",
+            "field_type": "text"
         },
         {
             "name": "Download Path",
@@ -58,7 +60,8 @@
             "default_value": "",
             "user_viewable": false,
             "user_editable": false,
-            "rules": "nullable|string"
+            "rules": "nullable|string",
+            "field_type": "text"
         },
         {
             "name": "Build Number",
@@ -67,7 +70,8 @@
             "default_value": "latest",
             "user_viewable": true,
             "user_editable": false,
-            "rules": "required|string|max:20"
+            "rules": "required|string|max:20",
+            "field_type": "text"
         }
     ]
 }
