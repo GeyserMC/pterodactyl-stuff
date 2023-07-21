@@ -15,3 +15,6 @@ This repo contains the eggs for GeyserMC and the docker images for auto update s
 ## GeyserConnect
 * Egg: `egg-geyser-connect.json`
 * Container: [`docker-geyserconnect`](https://github.com/GeyserMC/pterodactyl-stuff/tree/docker-geyserconnect)
+
+## GeyserDiscordBot
+* Egg: `egg-geyser-discord-bot.json`

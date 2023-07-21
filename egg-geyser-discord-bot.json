@@ -1,0 +1,77 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v1",
+        "update_url": null
+    },
+    "exported_at": "2022-02-20T22:30:43-08:00",
+    "name": "GeyserDiscordBot",
+    "author": "support@geysermc.org",
+    "description": "An egg to run the GeyserDiscordBot.",
+    "features": null,
+    "images": [
+        "ghcr.io\/parkervcp\/yolks:java_17"
+    ],
+    "file_denylist": [],
+    "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{JARFILE}}",
+    "config": {
+        "files": "{\r\n    \"bot.properties\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"prefix\": \"{{env.BOT_PREFIX}}\",\r\n            \"db-type\": \"{{env.DB_TYPE}}\",\r\n            \"web-public-address\": \"{{env.PUB_ADDRESS}}\",\r\n            \"web-address\": \"0.0.0.0\",\r\n            \"web-port\": \"{{server.build.default.port}}\",\r\n            \"sentry-dsn\": \"{{env.SENTRY_DSN}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Login Successful!\"\r\n}",
+        "logs": "{\r\n    \"custom\": true,\r\n    \"location\": \"logs\/latest.log\"\r\n}",
+        "stop": "^^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n# GeyserDiscordBot Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n\r\napt update\r\napt install -y wget jq\r\n\r\ncd \/mnt\/server\r\n\r\necho -e \"Downloading Bot jar file\"\r\nwget -O ${JARFILE} https:\/\/ci.opencollab.dev\/job\/GeyserMC\/job\/GeyserDiscordBot\/job\/master\/lastSuccessfulBuild\/artifact\/target\/GeyserBot.jar\r\necho -e \"Downloading default config file\"\r\nwget -O bot.properties https:\/\/raw.githubusercontent.com\/GeyserMC\/GeyserDiscordBot\/master\/bot.properties.example",
+            "container": "debian:buster-slim",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "GeyserBot Jar File",
+            "description": "The name of the bot jarfile to run the bot with.",
+            "env_variable": "JARFILE",
+            "default_value": "GeyserBot.jar",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|regex:\/^([\\w\\d._-]+)(\\.jar)$\/"
+        },
+        {
+            "name": "Database Type",
+            "description": "The database type the bot will use.\r\n\r\nNote: Using the \"mysql\" db type will require you to set up your own database.",
+            "env_variable": "DB_TYPE",
+            "default_value": "sqlite",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:8"
+        },
+        {
+            "name": "Prefix",
+            "description": "The bot's prefix for commands.",
+            "env_variable": "BOT_PREFIX",
+            "default_value": "!",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|between:1,10"
+        },
+        {
+            "name": "Web Public Address",
+            "description": "The publicly accessible URL for the leaderboard.",
+            "env_variable": "PUB_ADDRESS",
+            "default_value": "localhost",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string"
+        },
+        {
+            "name": "Sentry DSN",
+            "description": "The DSN used for sending events to Sentry. (https:\/\/sentry.io)",
+            "env_variable": "SENTRY_DSN",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string"
+        }
+    ]
+}
