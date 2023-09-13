@@ -40,7 +40,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-          context: $DOCKER_CONTAINER/
+          context: ${{ env.DOCKER_CONTAINER }}/
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/$DOCKER_OWNER/$DOCKER_CONTAINER:latest
+          tags: ghcr.io/${{ env.DOCKER_OWNER }}/${{ env.DOCKER_CONTAINER }}:latest
