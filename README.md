@@ -17,7 +17,7 @@ This repo contains the eggs for GeyserMC and the docker images for auto update s
 
 ### Geyser: Standalone + [GeyserConnect](https://github.com/GeyserMC/GeyserConnect)
 * Egg: `egg-geyser-connect.json`
-* Container: Uses the geyser container and loads the extension in
+* Container: Uses the normal Pterodactyl Geyser container and loads the extension in
 
 ## Floodgate
 ### Floodgate: Spigot + [PaperMC](https://papermc.io/downloads/paper)
