@@ -1,0 +1,40 @@
+name: Build pterodactyl-geyserconnect
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'pterodactyl-geyserconnect/**'
+      - '!pterodactyl-geyserconnect/README.md'
+
+env:
+  DOCKER_OWNER: ${{ github.repository_owner }}
+  DOCKER_CONTAINER: pterodactyl-geyserconnect
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Fix Docker environment variables
+        run: |
+          # Make lowercase
+          echo "DOCKER_OWNER=$(echo $DOCKER_OWNER | tr '[A-Z]' '[a-z]')" >> $GITHUB_ENV
+          echo "DOCKER_CONTAINER=$(echo $DOCKER_CONTAINER | tr '[A-Z]' '[a-z]')" >> $GITHUB_ENV
+
+      - name: Build the Docker image
+        run: |
+          docker build $DOCKER_CONTAINER/ --tag $DOCKER_CONTAINER:latest
+          docker tag $DOCKER_CONTAINER:latest ghcr.io/$DOCKER_OWNER/$DOCKER_CONTAINER:latest
+
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
+      - name: Push to GHCR
+        run: |
+          docker push ghcr.io/$DOCKER_OWNER/$DOCKER_CONTAINER:latest
