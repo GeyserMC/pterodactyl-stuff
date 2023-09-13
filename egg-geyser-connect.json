@@ -10,7 +10,7 @@
     "description": "GeyserConnect is an easy way for Bedrock Edition clients to connect to any Java Edition servers without having to run anything.",
     "features": null,
     "docker_images": {
-        "quay.io\/geysermc\/pterodactyl-stuff:docker-geyser": "quay.io\/geysermc\/pterodactyl-stuff:docker-geyser"
+        "ghcr.io\/geysermc\/pterodactyl-geyser:latest": "ghcr.io\/geysermc\/pterodactyl-geyser:latest"
     },
     "file_denylist": [],
     "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
