@@ -40,7 +40,7 @@
         },
         {
             "name": "Geyser Auto Update",
-            "description": "Should Geyser attempt an auto-update on startup'.\r\nThis should be 0 for no or 1 for yes.",
+            "description": "Should Geyser attempt an auto-update on startup.",
             "env_variable": "AUTO_UPDATE",
             "default_value": "1",
             "user_viewable": true,
