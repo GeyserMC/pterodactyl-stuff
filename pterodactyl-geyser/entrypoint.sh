@@ -11,13 +11,13 @@ export INTERNAL_IP=`ip route get 1 | awk '{print $NF;exit}'`
 if [ "${AUTO_UPDATE}" == "1" ]; then
 	echo "Checking for updates..."
 
-	LATEST_HASH=`curl -s https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/${UPDATE_BRANCH}/lastSuccessfulBuild/api/xml?xpath=//lastBuiltRevision/SHA1 | sed 's/.*>\(.*\)<.*/\1/'`
+	LATEST_HASH=`curl -L https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest | jq -r .downloads.standalone.sha256`
 	CURRENT_HASH=`cat .currenthash 2>/dev/null`
 
 	if [ "$LATEST_HASH" != "$CURRENT_HASH" ]; then
 		echo "Update available!"
 		echo "Updating from '$CURRENT_HASH' -> '$LATEST_HASH'"
-		curl -s -o ${SERVER_JARFILE} https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/${UPDATE_BRANCH}/lastSuccessfulBuild/artifact/bootstrap/standalone/build/libs/Geyser-Standalone.jar
+		curl -s -o ${SERVER_JARFILE} https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/standalone
 
 		echo "$LATEST_HASH" > ".currenthash"
 		echo "Updated!"
