@@ -37,6 +37,16 @@
             "user_editable": true,
             "rules": "required|regex:\/^([\\w\\d._-]+)(\\.jar)$\/",
             "field_type": "text"
+        },
+        {
+            "name": "Geyser Auto Update",
+            "description": "Should Geyser attempt an auto-update on startup.",
+            "env_variable": "AUTO_UPDATE",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean|numeric",
+            "field_type": "text"
         }
     ]
 }
