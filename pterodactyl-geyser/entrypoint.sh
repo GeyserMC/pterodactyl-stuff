@@ -17,7 +17,7 @@ if [ "${AUTO_UPDATE}" == "1" ]; then
 	if [ "$LATEST_HASH" != "$CURRENT_HASH" ]; then
 		echo "Update available!"
 		echo "Updating from '$CURRENT_HASH' -> '$LATEST_HASH'"
-		curl -s -o ${SERVER_JARFILE} https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/standalone
+		curl -L -s -o ${SERVER_JARFILE} https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/standalone
 
 		echo "$LATEST_HASH" > ".currenthash"
 		echo "Updated!"
