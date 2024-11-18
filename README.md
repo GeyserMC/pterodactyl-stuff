@@ -5,9 +5,6 @@ This repo contains the eggs for GeyserMC and the docker images for auto update s
 ### [PaperMC](https://papermc.io/downloads/paper) + Geyser + Floodgate
 * Egg: `egg-paper--geyser--floodgate.json`
 
-### [Waterfall](https://papermc.io/downloads/waterfall) + Geyser + Floodgate
-* Egg: `egg-waterfall--geyser--floodgate.json`
-
 ### [Velocity](https://papermc.io/downloads/velocity) + Geyser + Floodgate
 * Egg: `egg-velocity--geyser--floodgate.json`
 

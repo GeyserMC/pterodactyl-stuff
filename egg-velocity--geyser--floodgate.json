@@ -10,6 +10,7 @@
     "description": "Velocity is a Minecraft server proxy with unparalleled server support, scalability, and flexibility.",
     "features": null,
     "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:java_21": "ghcr.io\/pterodactyl\/yolks:java_21",
         "ghcr.io\/pterodactyl\/yolks:java_17": "ghcr.io\/pterodactyl\/yolks:java_17",
         "ghcr.io\/pterodactyl\/yolks:java_16": "ghcr.io\/pterodactyl\/yolks:java_16"
     },
