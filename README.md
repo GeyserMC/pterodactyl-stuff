@@ -3,7 +3,7 @@ This repo contains the eggs for GeyserMC and the docker images for auto update s
 
 ## Paper + Geyser / Floodgate eggs
 
-The Paper eggs use the [Paper API v3](https://docs.papermc.io/misc/downloads-service/) (`fill.papermc.io`) and [ptero-eggs](https://github.com/ptero-eggs/yolks) Java images. Paper, Geyser, and Floodgate are fetched at **install/reinstall** time. Geyser and Floodgate builds are resolved from the [GeyserMC Downloads API](https://geysermc.org/wiki/api/) using the selected **Minecraft Version** (changelog matching, with a fallback to `latest` when no build is found).
+The Paper eggs use the [Paper API v3](https://docs.papermc.io/misc/downloads-service/) (`fill.papermc.io`) and [ptero-eggs](https://github.com/ptero-eggs/yolks) Java images. Paper, Geyser, and Floodgate are fetched at **install/reinstall** time.
 
 ### Eggs
 
