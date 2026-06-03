@@ -25,7 +25,7 @@
     "file_denylist": [],
     "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}",
     "config": {
-        "files": "{\r\n    \"server.properties\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"server-ip\": \"0.0.0.0\",\r\n            \"server-port\": \"{{server.build.default.port}}\",\r\n            \"query.port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
+        "files": "{\r\n    \"server.properties\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"server-ip\": \"0.0.0.0\",\r\n            \"server-port\": \"{{env.JAVA_PORT}}\",\r\n            \"query.port\": \"{{env.JAVA_PORT}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\"done\":\")! For help, type \"}",
         "logs": "{}",
         "stop": "stop"
@@ -76,6 +76,16 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Java Server Port",
+            "description": "TCP port for the Minecraft Java server (server.properties). Set this to match your server's primary allocation.",
+            "env_variable": "JAVA_PORT",
+            "default_value": "25565",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:6",
             "field_type": "text"
         }
     ]
